@@ -3,18 +3,14 @@ import Protected from './components/Protected';
 import Layout from './components/Layout';
 import LoginForm from './components/forms/LoginForm';
 
-// Страницы
+// ✅ Импортируем реальную страницу
+import BlocksPage from './pages/BlocksPage';
+import UsersPage from './pages/UsersPage';
+import SearchStatsPage from './pages/SearchStatsPage';
+import MenuBlocksPage from './pages/MenuBlocksPage';
+
 function HomePage() {
   return <h2>Главная страница</h2>;
-}
-function BlocksPage() {
-  return <h2>Блоки меню</h2>;
-}
-function UsersPage() {
-  return <h2>Пользователи</h2>;
-}
-function SearchStatsPage() {
-  return <h2>Статистика поиска</h2>;
 }
 
 function LoginPage() {
@@ -31,10 +27,10 @@ function LoginPage() {
        }}>
       <div style={{ 
         width: '300px',
-          padding: '1rem',
-          border: '1px solid #ccc',
-          borderRadius: '8px',
-          background: 'white',
+        padding: '1rem',
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        background: 'white',
        }}>
         <h2>Вход</h2>
         <LoginForm onLogin={() => navigate('/')} />
@@ -63,7 +59,7 @@ export default function App() {
         element={
           <Protected>
             <Layout>
-              <BlocksPage />
+              <BlocksPage /> {/* ✅ Теперь это страница с таблицей */}
             </Layout>
           </Protected>
         }
@@ -74,6 +70,16 @@ export default function App() {
           <Protected>
             <Layout>
               <UsersPage />
+            </Layout>
+          </Protected>
+        }
+      />
+      <Route
+        path="/admin/blocks"
+        element={
+          <Protected>
+            <Layout>
+             <MenuBlocksPage /> {/* дерево */}
             </Layout>
           </Protected>
         }

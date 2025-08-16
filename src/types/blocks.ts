@@ -3,7 +3,7 @@ export type Block = {
   parent_id?: string | null;
   title: string;
   description?: string | null;
-  text_content?: unknown;
+  text_content?: string | null;
   link?: string | null;
   prev_id?: string | null;
   next_id?: string | null;
