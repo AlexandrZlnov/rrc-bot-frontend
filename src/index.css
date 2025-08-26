@@ -72,3 +72,17 @@ body {
 .form-checkbox {
   @apply rounded border-gray-300 text-blue-600 focus:ring-blue-500;
 }
+
+/* Кастомный цвет Fiesta */
+.btn-fiesta {
+  background-color: #DE443A;
+  color: white;
+}
+
+.btn-fiesta:hover {
+  background-color: #C53A30;
+}
+
+.btn-fiesta:focus {
+  ring-color: #DE443A;
+}

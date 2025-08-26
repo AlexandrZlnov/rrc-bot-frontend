@@ -218,25 +218,25 @@ export default function MenuBlocksPage() {
       {/* Table */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
+          <table className="w-full border-collapse border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+            <thead className="bg-gray-100 border-b-2 border-gray-200">
               <tr>
-                <th className="w-12 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="w-12 px-4 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   <GripVertical className="h-4 w-4 mx-auto" />
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Title
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Description
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Content
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Searchable
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -346,7 +346,7 @@ export default function MenuBlocksPage() {
                       ) : (
                         <button
                           onClick={() => startEdit(row)}
-                          className="inline-flex items-center gap-1 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-fiesta-500 text-white rounded-md hover:bg-fiesta-600 focus:ring-2 focus:ring-fiesta-500 focus:ring-offset-2 transition-colors text-sm font-medium"
                         >
                           <Edit className="h-4 w-4" />
                           Редактировать
