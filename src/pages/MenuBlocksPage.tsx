@@ -16,6 +16,7 @@ import {
 type BlockWithContent = Block & {
   content: string;
   order_index?: number | null;
+  tags?: string[];
 };
 
 type SortKey = 'title' | 'created_at' | 'is_searchable';
@@ -47,6 +48,7 @@ export default function MenuBlocksPage() {
         is_searchable: !!b.is_searchable,
         created_at: b.created_at || '',
         order_index: b.order_index ?? i,
+        tags: b.tags || [],
       }));
       setBlocks(normalized);
     } catch (err) {
@@ -67,11 +69,22 @@ export default function MenuBlocksPage() {
       content: row.content,
       link: row.link,
       is_searchable: row.is_searchable,
+      tags: row.tags || [],
     });
   };
 
   const cancelEdit = () => { setEditingId(null); setDraft({}); };
   const applyDraftChange = (field: keyof BlockWithContent, value: any) => setDraft(prev => ({ ...prev, [field]: value }));
+
+  const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const tagsArray = value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    setDraft(prev => ({ ...prev, tags: tagsArray }));
+  };
+
+  const getTagsDisplayValue = () => {
+    return draft.tags?.join(', ') || '';
+  };
 
   const saveRow = async () => {
     if (!editingId) return;
@@ -79,8 +92,9 @@ export default function MenuBlocksPage() {
       const payload = {
         title: draft.title ?? '',
         description: draft.description ?? '',
-        text_content: draft.content ?? '',
+        content: draft.content ?? '',
         link: draft.link ?? '',
+        tags: draft.tags || [],
         is_searchable: !!draft.is_searchable,
       };
       await updateBlock(editingId, payload);
@@ -99,7 +113,14 @@ export default function MenuBlocksPage() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     let arr = blocks;
-    if (q) arr = arr.filter(b => b.title.toLowerCase().includes(q) || (b.description ?? '').toLowerCase().includes(q) || (b.content ?? '').toLowerCase().includes(q));
+    if (q) {
+      arr = arr.filter(b => 
+        b.title.toLowerCase().includes(q) || 
+        (b.description ?? '').toLowerCase().includes(q) || 
+        (b.content ?? '').toLowerCase().includes(q) ||
+        (b.tags || []).some(tag => tag.toLowerCase().includes(q))
+      );
+    }
     if (onlySearchable) arr = arr.filter(b => b.is_searchable);
     if (parentFilter !== 'all') arr = arr.filter(b => (b.parent_id ?? 'root') === parentFilter || b.id === parentFilter);
     arr = [...arr].sort((a, b) => {
@@ -162,7 +183,7 @@ export default function MenuBlocksPage() {
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Поиск по названию, описанию или контенту..."
+              placeholder="Поиск по названию, описанию, контенту или тегам..."
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -233,6 +254,9 @@ export default function MenuBlocksPage() {
                 <th className="px-4 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Content
                 </th>
+                <th className="px-4 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+                  Tags
+                </th>
                 <th className="px-4 py-3 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Searchable
                 </th>
@@ -301,6 +325,31 @@ export default function MenuBlocksPage() {
                       )}
                     </td>
                     
+                    <td className="px-4 py-4">
+                      {isEditing ? (
+                        <input
+                          value={getTagsDisplayValue()}
+                          onChange={handleTagsChange}
+                          placeholder="tag1, tag2, tag3"
+                          className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                        />
+                      ) : (
+                        <div className="flex flex-wrap gap-1">
+                          {(row.tags || []).map((tag, index) => (
+                            <span
+                              key={index}
+                              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                          {(row.tags || []).length === 0 && (
+                            <span className="text-gray-400 text-sm">-</span>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                    
                     <td className="px-4 py-4 text-center">
                       {isEditing ? (
                         <label className="flex items-center justify-center gap-2">
@@ -346,7 +395,7 @@ export default function MenuBlocksPage() {
                       ) : (
                         <button
                           onClick={() => startEdit(row)}
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-fiesta-500 text-white rounded-md hover:bg-fiesta-600 focus:ring-2 focus:ring-fiesta-500 focus:ring-offset-2 transition-colors text-sm font-medium"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-[#DE443A] text-white rounded-md hover:bg-[#C53A30] focus:ring-2 focus:ring-[#DE443A] focus:ring-offset-2 transition-colors text-sm font-medium"
                         >
                           <Edit className="h-4 w-4" />
                           Редактировать
